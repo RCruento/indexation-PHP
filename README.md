@@ -55,5 +55,5 @@ Ce cahier des charges détaille les spécifications du projet d'indexation de do
 
 ---
 
-**Auteur : [Votre Nom]**
+**Auteur : [Rayan KOUSSA]**
 

@@ -1,48 +1,45 @@
 <?php
-    include_once "assets/php/fonction.php";
-    include_once "assets/php/traitement.php";
+include_once "assets/php/fonction.php";
+include_once "assets/php/traitement.php";
 
-    // Connexion à la base de données
-    $conn = connexionBD();
+// Connexion à la base de données
+$conn = connexionBD();
 
-    
-    session_start();
 
-    // Vérification de la connexion
-    if (!isset($_SESSION['user_id'])) {
-        header("Location: login.php"); // Redirect to the login page
-        exit();
-    }
+session_start();
 
-    // Bouton d'indexation
-    if(isset($_POST["add"]))
-{
-		$dossier = $_POST["rep"];
-		PDL($dossier);
-	
+// Vérification de la connexion
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php"); // Redirect to the login page
+    exit();
 }
 
-    // Bouton de suppression (Nettoyer la BDD)
-    if (isset($_POST["delete"])) {
-        // Supprimer les données de la base de données
-        $sql2 = "DELETE FROM `document`";
-        mysqli_query($conn, $sql2);
-        $sql3 = "DELETE FROM `mot_document`";
-        mysqli_query($conn, $sql3);
-        $sql1 = "DELETE FROM `mot`";
-        mysqli_query($conn, $sql1);
-        
-    }
+// Bouton d'indexation
+if (isset($_POST["add"])) {
+    $dossier = $_POST["rep"];
+    PDL($dossier);
+}
 
-    // Historique de données
-    $historique = array();
-    $sql = "SELECT id, source, titre, date FROM document";
-    $result = mysqli_query($conn, $sql);
-    if ($result) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            $historique[] = $row;
-        }
+// Bouton de suppression (Nettoyer la BDD)
+if (isset($_POST["delete"])) {
+    // Supprimer les données de la base de données
+    $sql2 = "DELETE FROM `document`";
+    mysqli_query($conn, $sql2);
+    $sql3 = "DELETE FROM `mot_document`";
+    mysqli_query($conn, $sql3);
+    $sql1 = "DELETE FROM `mot`";
+    mysqli_query($conn, $sql1);
+}
+
+// Historique de données
+$historique = array();
+$sql = "SELECT id, source, titre, date FROM document";
+$result = mysqli_query($conn, $sql);
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $historique[] = $row;
     }
+}
 ?>
 
 <!DOCTYPE html>
@@ -87,16 +84,15 @@
         </p>
     </div>
     <div class="text-center">
-    <div class="container">
+        <div class="container">
+            <form action="" method="post" enctype="multipart/form-data">
 
-
-<form action="" method="post" enctype="multipart/form-data">
-    
-    <input type="text" class="form-control" name="rep" id="rep"><br>
-	<input type="submit"  class="btn btn-primary btn-block"value="Indexation" name="add" /><br>
-	<input type="submit"  class="btn btn-primary btn-block"value="Supprimer Indexation" name="delete" />
-</form>
-</div>
+                <input type="text" class="form-control" name="rep" id="rep"><br>
+                <input type="submit" class="btn btn-primary btn-block" value="Indexation" name="add" /><br>
+                <input type="submit" class="btn btn-primary btn-block" value="Supprimer Indexation" name="delete" />
+                
+            </form>
+        </div>
     </div>
     <div class="text-center">
         <p class="text-center">
@@ -109,28 +105,27 @@
                         <th scope="col">Fichiers indexés</th>
                         <th scope="col">Titre</th>
                         <th scope="col">Date</th>
-                        
+                        <th scope="col">Ouvrir</th>
                     </tr>
                 </thead>
                 <tbody>
-                <?php if (!empty($historique)) : ?>
-                    <?php foreach ($historique as $entry) : ?>
+                    <?php if (!empty($historique)) : ?>
+                        <?php foreach ($historique as $entry) : ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($entry['source']); ?></td>
+                                <td><?php echo htmlspecialchars($entry['titre']); ?></td>
+                                <td><?php echo htmlspecialchars($entry['date']); ?></td>
+                                <td>
+                                    <a href="<?php echo $entry['source']; ?>" target="_blank">Ouvrir</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else : ?>
                         <tr>
-                            <td>
-                                <a href="<?php echo $entry['source']; ?>" target="_blank">
-                                    <?php echo $entry['source']; ?>
-                                </a>
-                            </td>
-                            <td><?php echo $entry['titre']; ?></td>
-                            <td><?php echo $entry['date']; ?></td>
+                            <td colspan="4">Aucun élément dans l'historique.</td>
                         </tr>
-                    <?php endforeach; ?>
-                <?php else : ?>
-                    <tr>
-                        <td colspan="3">Aucun élément dans l'historique.</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
+                    <?php endif; ?>
+                </tbody>
             </table>
         </div>
     </div>

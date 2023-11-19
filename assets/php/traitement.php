@@ -15,7 +15,7 @@ function PDL($dossier)
                     PDL($source); // Si c'est un sous-dossier, appelez récursivement la fonction
                 } else {
                     if (strpos($source, '.htm') !== false) { // Vérifiez l'extension du fichier
-                        echo $source;
+                        
                         traitement($source);
                     }
                 }
@@ -111,6 +111,7 @@ function traitement($source)
     //BDD 
         //Connexion
         $bdd = connexionBD();
+        $source = mysqli_real_escape_string($bdd, $source);
         $title = Unaccent($title);
         $description = Unaccent($description);
         // insertion source dans la table document

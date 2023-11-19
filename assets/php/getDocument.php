@@ -1,7 +1,7 @@
 <?php
 
 // Connexion 
-$bdd = mysqli_connect('localhost', 'root', '', 'tiw');
+$bdd = mysqli_connect('localhost', 'root', '', 'indexation');
 if (!$bdd) {
     die("Erreur de connexion à la base de données: " . mysqli_connect_error());
 }
@@ -11,10 +11,10 @@ if (isset($_GET['Rmot']) && !empty($_GET['Rmot'])) {
     $documentId = mysqli_real_escape_string($bdd, $_GET['Rmot']); // Évite les attaques par injection SQL
 
     $query = "SELECT m.mot AS text, md.poids AS size
-                  FROM mot m
-                  INNER JOIN mot_document md ON m.id = md.id_mot
-                  INNER JOIN document d ON md.id_document = d.id
-                  WHERE d.id = '$documentId' AND m.mot IS NOT NULL";
+              FROM mot m
+              INNER JOIN mot_document md ON m.id = md.id_mot
+              INNER JOIN document d ON md.id_document = d.id
+              WHERE d.id = '$documentId' AND m.mot IS NOT NULL";
 
     $docs = mysqli_query($bdd, $query);
 
@@ -39,7 +39,5 @@ if (isset($_GET['Rmot']) && !empty($_GET['Rmot'])) {
     echo json_encode(array('error' => 'Paramètre "Rmot" manquant ou invalide.'));
 }
 
-
 mysqli_close($bdd);
-
 ?>

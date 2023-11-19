@@ -1,4 +1,4 @@
-# Cahier des Charges
+# Cahier des Charges - Projet d'Indexation de Documents
 
 ## Introduction
 
@@ -53,7 +53,33 @@ Ce cahier des charges détaille les spécifications du projet d'indexation de do
 2. Utilisez le formulaire de recherche pour trouver des documents.
 3. Cliquez sur le bouton pour afficher le nuage de mots-clés associé à chaque document.
 
----
+## Explications des Fonctions PHP
 
-**Auteur : [Rayan KOUSSA]**
+### `connexionBD()`
+
+Cette fonction établit une connexion à la base de données MySQL et la renvoie.
+
+### `getBody($modele, $chaine_html)`
+
+Extrait le corps d'une page HTML en utilisant un modèle regex et le renvoie.
+
+### `traitementElement($separateurs, $chaine)`
+
+Divise une chaîne en mots en filtrant les mots vides et courts. Utilise la liste de mots vides définie dans le fichier `assets/dictionnaire.txt`.
+
+### `poids($tabl_occurrences, $coeficient)`
+
+Attribue des poids aux mots en fonction de leur occurrence. Calcul du poids en multipliant l'occurrence par un coefficient.
+
+### `getDescription($source)`, `getKeywords($source)`, `getTitle($modele, $chaine)`
+
+Ces fonctions extraient respectivement la description, les mots-clés et le titre d'une page HTML en utilisant des modèles regex.
+
+### `Unaccent($txt)`
+
+Supprime les accents des caractères d'une chaîne en utilisant la classe `Transliterator`.
+
+### `PDL($dossier)`, `traitement($source)`
+
+La fonction `PDL` parcourt le dossier spécifié et appelle la fonction `traitement` pour chaque fichier HTML trouvé. La fonction `traitement` effectue le nettoyage du HTML, extrait les données pertinentes, calcule les poids des mots et les insère dans la base de données.
 
